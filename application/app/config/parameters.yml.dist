@@ -1,0 +1,28 @@
+parameters:
+    pdo.client.dsn: 'mysql:host=mysql;port=3306;dbname=datasync'
+    pdo.client.username: 'root'
+    pdo.client.password: 'root'
+    pdo.client.options:
+    # PDO::MYSQL_ATTR_INIT_COMMAND
+    - 1002: 'SET NAMES utf8'
+
+    pdo.server.dsn: 'mysql:host=127.0.0.1;port=33060;dbname=datasync'
+    pdo.server.username: 'root'
+    pdo.server.password: 'root'
+    pdo.server.options:
+    # PDO::MYSQL_ATTR_INIT_COMMAND
+    - 1002: 'SET NAMES utf8'
+
+    jsonrpc.client.host: nginx
+    jsonrpc.client.port: 80
+    jsonrpc.client.url: http://%jsonrpc.client.host%:%jsonrpc.client.port%/server.php
+
+    datasync.client.options:
+        debug: false
+        log: true
+        blocksize: 5000
+        tables: 'MOCK_DATA'
+        id: 'id'
+        create_tables: true
+        delete_entries: true
+        entries: 'INSERT_OR_UPDATE'

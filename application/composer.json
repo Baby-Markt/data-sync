@@ -1,0 +1,38 @@
+{
+    "name": "babymarkt/datasync",
+    "description": "Sync your database from server to client using JSON-RPC.",
+    "version": "0.2.0",
+    "type": "project",
+    "keywords": [
+        "database",
+        "sync"
+    ],
+    "authors": [
+        {
+            "name": "Arkadius Jonczek",
+            "email": "arkadius@jonczek.de",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php" : "^7.0",
+        "fguillot/json-rpc": "@stable",
+        "symfony/console": "^3.4",
+        "symfony/dependency-injection": "^3.4",
+        "symfony/yaml": "^3.4",
+        "symfony/config": "^3.4"
+    },
+    "require-dev": {
+      "phpunit/phpunit": "^6.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "DataSync\\": "src/DataSync/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DataSync\\": "tests/DataSync/"
+        }
+    }
+}

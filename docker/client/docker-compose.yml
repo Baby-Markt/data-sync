@@ -1,0 +1,26 @@
+version: "2"
+
+services:
+  php-fpm:
+    build: ./images/php-fpm
+    volumes:
+      - ../../application:/var/www/data-sync
+    networks:
+      - backend
+      - data-sync-server_frontend
+
+  mysql:
+    image: mysql:5.7
+    networks:
+      - backend
+    ports:
+      - "33061:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: datasync
+
+networks:
+  backend:
+    driver: "bridge"
+  data-sync-server_frontend:
+    external: true

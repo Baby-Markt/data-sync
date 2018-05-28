@@ -1,0 +1,42 @@
+version: "2"
+
+services:
+  nginx:
+    build: ./images/nginx
+    depends_on:
+      - php-fpm
+    ports:
+      - "8001:80"
+    volumes:
+      - ../../application:/var/www/data-sync
+    networks:
+      - backend
+      - frontend
+    environment:
+      APPLICATION_ENV: local
+    tty: true
+
+  php-fpm:
+    build: ./images/php-fpm
+    volumes:
+      - ../../application:/var/www/data-sync
+    networks:
+      - backend
+
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - ./init/mysql:/docker-entrypoint-initdb.d
+    networks:
+      - backend
+    ports:
+      - "33060:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: datasync
+
+networks:
+  backend:
+    driver: "bridge"
+  frontend:
+    driver: "bridge"

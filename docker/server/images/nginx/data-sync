@@ -1,0 +1,27 @@
+server {
+    set $custom_document_root /var/www/data-sync;
+    set $custom_document_index "index.php index.html";
+
+    server_name localhost;
+    root $custom_document_root;
+    index $custom_document_index;
+
+    error_log /var/log/nginx/data-sync.log;
+    access_log /var/log/nginx/data-sync.log;
+
+    location ~ \.php$ {
+        include fastcgi_params;
+
+        fastcgi_split_path_info ^(.+\.php)(.*)$;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+
+        fastcgi_pass php-fpm;
+        fastcgi_index index.php;
+    }
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}

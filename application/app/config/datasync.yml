@@ -1,0 +1,43 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: services.yml }
+
+parameters:
+    datasync.command.synccommand.class: DataSync\Command\SyncCommand
+    datasync.action.syncaction.class:   DataSync\Action\SyncAction
+    datasync.driver.mysql.class:        DataSync\Driver\MySql
+    datasync.driver.jsonrpc.class:      DataSync\Driver\JsonRpc
+    vendor.pdo.class:                   PDO
+    vendor.jsonrpc.client.class:        JsonRPC\Client
+
+services:
+    datasync.command.synccommand:
+        class: %datasync.command.synccommand.class%
+        arguments:
+            - '@datasync.action.syncaction'
+            - '@datasync.action.syncaction.destination'
+            - '@datasync.action.syncaction.source'
+
+    datasync.action.syncaction:
+        class: %datasync.action.syncaction.class%
+        arguments: [%datasync.client.options%]
+
+    vendor.pdo:
+        class: %vendor.pdo.class%
+        arguments:
+            - %pdo.client.dsn%
+            - %pdo.client.username%
+            - %pdo.client.password%
+            - %pdo.client.options%
+
+    vendor.pdo.server:
+        class: %vendor.pdo.class%
+        arguments:
+            - %pdo.server.dsn%
+            - %pdo.server.username%
+            - %pdo.server.password%
+            - %pdo.server.options%
+
+    vendor.jsonrpc.client:
+        class: %vendor.jsonrpc.client.class%
+        arguments: [%jsonrpc.client.url%]

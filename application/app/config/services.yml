@@ -1,0 +1,7 @@
+services:
+    datasync.action.syncaction.destination:
+        class: %datasync.driver.mysql.class%
+        arguments: ['@vendor.pdo']
+    datasync.action.syncaction.source:
+        class: %datasync.driver.jsonrpc.class%
+        arguments: ['@vendor.jsonrpc.client']
