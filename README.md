@@ -1,12 +1,28 @@
 # DataSync
 
-It's a babymarkt.de Slacktime project by Arkadius Jonczek to sync database table entries from different data source and destination types. It also supports different adapters if neccessary and is fully extensible.
+It's a babymarkt.de Slacktime project by Arkadius Jonczek to synchronize databases. 
+
+The synchronization is made from the data source to the data destination. You can configure which database tables should be synchronized.
+
+You can use a direct connection to your data (e.g. MySQL Server) or you can use a adapter (e.g. JSON-RPC) if you do not have direct access to your data (e.g. MySQL Server).
 
 ![data-sync](data-sync.png)
 
+## Integrations
+
+The data-sync project supports the following drivers and adapters for now.
+
+### Drivers
+
+- MySQL
+
+### Adapters
+
+- JSON-RPC
+
 ## Configuration
 
-Create a parameters.yml file for the server and client configuration.
+Create a parameters.yml file for the data sync configuration.
 
 ```bash
 cp app/config/parameters.yml.dist app/config/parameters.yml
