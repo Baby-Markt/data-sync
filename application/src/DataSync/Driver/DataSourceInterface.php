@@ -26,6 +26,15 @@ interface DataSourceInterface
     public function getCreateTableQuery($table);
 
     /**
+     * Get the fields of the given Table.
+     *
+     * @param $table
+     *
+     * @return array
+     */
+    public function getFields($table);
+
+    /**
      * Get Entries Count for the given Table.
      *
      * @param string $table
