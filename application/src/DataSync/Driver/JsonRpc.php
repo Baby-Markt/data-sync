@@ -50,6 +50,84 @@ class JsonRpc implements DataDestinationInterface, DataSourceInterface
     }
 
     /**
+     * Get the fields of the given Table.
+     *
+     * @param $table
+     *
+     * @return array
+     */
+    public function getFields($table)
+    {
+        return $this->client->getFields($table);
+    }
+
+    /**
+     * Check if the table has the given Field.
+     *
+     * @param $table
+     * @param $fieldName
+     *
+     * @return mixed
+     */
+    public function hasField($table, $fieldName)
+    {
+        return $this->client->hasField($table, $fieldName);
+    }
+
+    /**
+     * Check if the given Field of the given Table has changed.
+     *
+     * @param $table
+     * @param $field
+     *
+     * @return mixed
+     */
+    public function hasFieldChanged($table, $field)
+    {
+        return $this->client->hasFieldChanged($table, $field);
+    }
+
+    /**
+     * Add given Field of the given Table after Field.
+     *
+     * @param $table
+     * @param $field
+     * @param null $previousField
+     *
+     * @return mixed
+     */
+    public function addField($table, $field, $previousField = null)
+    {
+        return $this->client->addField($table, $field, $previousField);
+    }
+
+    /**
+     * Modify the given Field of the given Table.
+     *
+     * @param $table
+     * @param $field
+     *
+     * @return mixed
+     */
+    public function modifyField($table, $field)
+    {
+        return $this->client->modifyField($table, $field);
+    }
+
+    /**
+     * Drop remaining Fields of the given Table not in given Fields list.
+     *
+     * @param $table
+     * @param $fields
+     *
+     * @return mixed
+     */
+    public function dropFields($table, $fields)
+    {
+        return $this->client->dropFields($table, $fields);
+    }
+
+    /**
      * Has the Table an Entry with the given ID?
      *
      * @param string $table

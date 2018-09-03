@@ -44,6 +44,124 @@ class MySql implements DataDestinationInterface, DataSourceInterface
         return $result;
     }
 
+    public function getFields($table)
+    {
+        $query  = sprintf('SHOW COLUMNS FROM %s', $table);
+
+        $stmt   = $this->pdo->query($query);
+        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    public function hasField($table, $fieldName)
+    {
+        $query = sprintf('SHOW COLUMNS FROM %s WHERE Field = "%s"', $table, $fieldName);
+
+        $stmt   = $this->pdo->query($query);
+        $result = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+
+        return count($result) == 1;
+    }
+
+    public function hasFieldChanged($table, $field)
+    {
+        $query = sprintf('SHOW COLUMNS FROM %s WHERE Field = "%s"', $table, $field['Field']);
+
+        $stmt    = $this->pdo->query($query);
+        $dbField = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        foreach ($dbField as $key => $value) {
+            if ($field[$key] != $value) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function addField($table, $field, $previousField = null)
+    {
+        $addFieldString = sprintf('ADD COLUMN %s %s', $field['Field'], $field['Type']);
+
+        if ($field['Null'] == 'YES') {
+            $addFieldString .= ' NULL';
+        }
+        else {
+            $addFieldString .= ' NOT NULL';
+        }
+
+        if ($field['Default'] != null) {
+            $addFieldString .= ' DEFAULT "' . $field['Default'] . '"';
+        }
+
+        if ($previousField != null) {
+            $addFieldString .= ' AFTER ' . $previousField['Field'];
+        }
+
+        echo $query = sprintf('ALTER TABLE %s %s', $table, $addFieldString);
+
+        $stmt   = $this->pdo->query($query);
+        $result = $stmt->execute();
+
+        return $result;
+    }
+
+    public function modifyField($table, $field)
+    {
+        $modifyFieldString = sprintf('MODIFY COLUMN %s %s', $field['Field'], $field['Type']);
+
+        if ($field['Null'] == 'YES') {
+            $modifyFieldString .= ' NULL';
+        }
+        else {
+            $modifyFieldString .= ' NOT NULL';
+        }
+
+        if ($field['Default'] != null) {
+            $modifyFieldString .= ' DEFAULT "' . $field['Default'] . '"';
+        }
+
+        $query = sprintf('ALTER TABLE %s %s', $table, $modifyFieldString);
+
+        $stmt   = $this->pdo->query($query);
+        $result = $stmt->execute();
+
+        return $result;
+    }
+
+    public function dropFields($table, $fields)
+    {
+        $localFields = $this->getFields($table);
+
+        foreach ($localFields as $field) {
+            $localFieldNames[] = $field['Field'];
+        }
+
+        foreach ($fields as $field) {
+            $remoteFieldNames[] = $field['Field'];
+        }
+
+        $dropFields = array_diff($localFieldNames, $remoteFieldNames);
+
+        if (count($dropFields) == 0) {
+            return false;
+        }
+
+        foreach ($dropFields as $fieldName) {
+            $dropFieldsSql[] = 'DROP COLUMN ' . $fieldName;
+        }
+
+        $dropFieldsString = implode(',', $dropFieldsSql);
+
+        $query = sprintf('ALTER TABLE %s %s', $table, $dropFieldsString);
+
+        $stmt   = $this->pdo->query($query);
+        $result = $stmt->execute();
+
+        return $result;
+    }
+
     public function hasEntry($table, $id, $idName = 'id', $idType = 'int')
     {
         $query  = sprintf('SELECT %s FROM %s WHERE %s = \'%s\'', $idName, $table, $idName, $id);

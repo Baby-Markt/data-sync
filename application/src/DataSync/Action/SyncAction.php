@@ -107,6 +107,39 @@ class SyncAction implements ActionInterface
                 $destination->createTable($query);
             }
 
+            if ($this->options['alter_tables']) {
+
+                $fields = $source->getFields($syncTable);
+                $previousField = null;
+
+                foreach ($fields as $field) {
+
+                    $fieldName = $field['Field'];
+                    $this->log(sprintf('Syncing Field %s', $fieldName), '');
+
+                    if ($destination->hasField($syncTable, $fieldName)) {
+                        if ($destination->hasFieldChanged($syncTable, $field)) {
+                            // Modify Field
+                            $this->log(' => Modify');
+                            $destination->modifyField($syncTable, $field);
+                        }
+                        else {
+                            $this->log(' => Skip (No Changes)');
+                        }
+                    }
+                    else {
+                        // Add Field
+                        $this->log(' => Add');
+                        $destination->addField($syncTable, $field, $previousField);
+                    }
+
+                    $previousField = $field;
+                }
+
+                $this->log(sprintf('Dropping old fields in %s', $syncTable));
+                $destination->dropFields($syncTable, $fields);
+            }
+
             $blocksize = $this->options['blocksize'];
             for ($offset = 0; $offset < $syncTableEntriesCount; $offset += $blocksize) {
 
@@ -118,8 +151,8 @@ class SyncAction implements ActionInterface
                     $this->log(sprintf('Syncing Entry %s', $syncTableEntryId), '');
 
                     if ($destination->hasEntry($syncTable, $syncTableEntryId, $this->options['id'])) {
-                        // Update Entry if necessary
                         if ($destination->hasEntryChanged($syncTable, $entry, $this->options['id'])) {
+                            // Update Entry
                             $this->log(' => Update');
                             $destination->updateEntry($syncTable, $entry, $this->options['id']);
                         } else {
@@ -134,7 +167,7 @@ class SyncAction implements ActionInterface
             }
 
             if ($this->options['delete_entries']) {
-                $this->log(sprintf('Deleting old local entries'));
+                $this->log(sprintf('Deleting old local entries in %s', $syncTable));
                 $destination->deleteEntries($syncTable, $syncTableEntryIds, $this->options['id']);
             }
         }

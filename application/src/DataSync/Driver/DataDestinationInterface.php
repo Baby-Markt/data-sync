@@ -28,6 +28,66 @@ interface DataDestinationInterface
     public function createTable($query);
 
     /**
+     * Get the fields of the given Table.
+     *
+     * @param $table
+     *
+     * @return array
+     */
+    public function getFields($table);
+
+    /**
+     * Check if the table has the given Field.
+     *
+     * @param $table
+     * @param $fieldName
+     *
+     * @return mixed
+     */
+    public function hasField($table, $fieldName);
+
+    /**
+     * Check if the given Field of the given Table has changed.
+     *
+     * @param $table
+     * @param $field
+     *
+     * @return mixed
+     */
+    public function hasFieldChanged($table, $field);
+
+    /**
+     * Add given Field of the given Table after Field.
+     *
+     * @param $table
+     * @param $field
+     * @param null $previousField
+     *
+     * @return mixed
+     */
+    public function addField($table, $field, $previousField = null);
+
+    /**
+     * Modify the given Field of the given Table.
+     *
+     * @param $table
+     * @param $field
+     *
+     * @return mixed
+     */
+    public function modifyField($table, $field);
+
+    /**
+     * Drop remaining Fields of the given Table not in given Fields list.
+     *
+     * @param $table
+     * @param $fields
+     *
+     * @return mixed
+     */
+    public function dropFields($table, $fields);
+
+    /**
      * Has the Table an Entry with the given ID?
      *
      * @param string $table
