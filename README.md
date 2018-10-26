@@ -28,7 +28,7 @@ The data-sync project supports the following drivers and adapters for now.
 Clone the github repository.
 
 ```
-git clone https://github.com/Baby-Markt/data-sync.git
+git clone git@github.com:Baby-Markt/data-sync.git
 ```
 
 ## Configuration
