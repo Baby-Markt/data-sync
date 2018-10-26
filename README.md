@@ -1,10 +1,12 @@
 # DataSync
 
-It's a babymarkt.de Slacktime project by Arkadius Jonczek to synchronize databases. 
+This project is a result as a babymarkt.de Slacktime project by [Arkadius Jonczek](https://github.com/arkadiusjonczek) to synchronize internal development databases. 
 
-The synchronization is made from the data source to the data destination. You can configure which database tables should be synchronized.
+You can synchronize your data (e.g. MySQL Databases) using different connection adapters (e.g. JSON-RPC). 
 
 You can use a direct connection to your data (e.g. MySQL Server) or you can use a adapter (e.g. JSON-RPC) if you do not have direct access to your data (e.g. MySQL Server).
+
+The idea was to build an extensible data-sync framework. So you can write custom actions, data drivers and connection adapters.
 
 ![data-sync](data-sync.png)
 
@@ -12,13 +14,22 @@ You can use a direct connection to your data (e.g. MySQL Server) or you can use 
 
 The data-sync project supports the following drivers and adapters for now.
 
-### Drivers
+### Data Drivers
 
 - MySQL
 
-### Adapters
+### Connection Adapters
 
+- Direct (PDO)
 - JSON-RPC
+
+## Start
+
+Clone the github repository.
+
+```
+git clone https://github.com/Baby-Markt/data-sync.git
+```
 
 ## Configuration
 
